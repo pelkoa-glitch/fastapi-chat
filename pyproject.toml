@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "fastapi-chat"
+version = "0.1.0"
+description = "MIT"
+authors = ["pelkoa-glitch <hvngmvnvibe@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.0"
+motor = "^3.6.0"
+uvicorn = {extras = ["all"], version = "^0.30.6"}
+ipython = "^8.27.0"
+pytest = "^8.3.3"
+faker = "^29.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
