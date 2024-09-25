@@ -1,4 +1,4 @@
-# FastAPI ddd chat boilerplate
+# FastAPI chat
 
 ### Fastapi chat:
 

@@ -1,9 +1,17 @@
-from abc import ABC, abstractmethod
+from abc import (
+    ABC,
+    abstractmethod,
+)
 from dataclasses import dataclass
-from typing import Any, Generic, TypeVar
+from typing import (
+    Any,
+    Generic,
+    TypeVar,
+)
 
 
 VT = TypeVar('VT', bound=Any)
+
 
 @dataclass(frozen=True)
 class BaseValueObject(ABC, Generic[VT]):
@@ -17,5 +25,5 @@ class BaseValueObject(ABC, Generic[VT]):
         ...
 
     @abstractmethod
-    def as_generic_type(self):
+    def as_generic_type(self) -> VT:
         ...
