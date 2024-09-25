@@ -4,7 +4,10 @@ from dataclasses import (
 )
 
 from domain.entities.base import BaseEntity
-from domain.events.messages import NewMessageRecievedEvent
+from domain.events.messages import (
+    NewChatCreated,
+    NewMessageRecievedEvent,
+)
 from domain.values.messages import (
     Text,
     Title,
@@ -18,12 +21,18 @@ class Message(BaseEntity):
 
 @dataclass(eq=False)
 class Chat(BaseEntity):
-
     title: Title
     messages: set[Message] = field(
         default_factory=set,
         kw_only=True,
     )
+
+    @classmethod
+    def create_chat(cls, title: Title) -> 'Chat':
+        new_chat = cls(title=title)
+        new_chat.register_event(NewChatCreated(chat_oid=new_chat.oid, chat_title=new_chat.title.as_generic_type()))
+
+        return new_chat
 
     def add_message(self, message: Message):
         self.messages.add(message)
