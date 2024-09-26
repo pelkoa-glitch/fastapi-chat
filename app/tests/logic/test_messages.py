@@ -2,7 +2,7 @@ import pytest
 from domain.entities.messages import Chat
 from domain.values.messages import Title
 from faker import Faker
-from infra.repositories.messages import BaseChatRepository
+from infra.repositories.messages.base import BaseChatRepository
 from logic.commands.messages import CreateChatCommand
 from logic.exceptions.messages import ChatWithThatTitleAlreadyExistsException
 from logic.mediator import Mediator

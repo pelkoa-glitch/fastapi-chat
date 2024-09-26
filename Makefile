@@ -4,11 +4,22 @@ LOGS = docker logs
 ENV = --env-file .env
 APP_FILE = docker_compose/app.yaml
 APP_CONTAINER = main-app
+STORAGES_FILE = docker_compose/storages.yaml
+STORAGES_CONTAINER = chat-mongodb
 
 
 
+#all containers
+.PHONY: all
+all:
+	${DC} -f ${APP_FILE} ${ENV} -f ${STORAGES_FILE} ${ENV} up --build -d
+
+.PHONY: all-down
+all-down:
+	${DC} -f ${APP_FILE} ${ENV} -f ${STORAGES_FILE} ${ENV} down
 
 
+#app container
 .PHONY: app
 app:
 	${DC} -f ${APP_FILE} ${ENV} up --build -d
@@ -29,3 +40,17 @@ app-logs:
 .PHONY: test
 test:
 	${EXEC} ${APP_CONTAINER} pytest
+
+
+#storages container
+.PHONY: storages
+storages:
+	${DC} -f ${STORAGES_FILE} ${ENV} up --build -d
+
+.PHONY: storages-down
+storages-down:
+	${DC} -f ${STORAGES_FILE} down
+
+.PHONY: storages-logs
+storages-logs:
+	${LOGS} ${STORAGES_CONTAINER} -f

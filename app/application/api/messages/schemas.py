@@ -12,7 +12,7 @@ class CreateChatResponseSchema(BaseModel):
 
     @classmethod
     def from_entity(cls, chat: Chat) -> 'CreateChatResponseSchema':
-        return CreateChatRequestSchema(
+        return CreateChatResponseSchema(
             oid=chat.oid,
             title=chat.title.as_generic_type(),
         )

@@ -1,18 +1,18 @@
 from functools import lru_cache
 
-from infra.repositories.messages import (
-    BaseChatRepository,
-    MemoryChatRepository,
-)
+from infra.repositories.messages.base import BaseChatRepository
+from infra.repositories.messages.mongo import MongoDBChatRepository
 from logic.commands.messages import (
     CreateChatCommand,
     CreteChatCommandHandler,
 )
 from logic.mediator import Mediator
+from motor.motor_asyncio import AsyncIOMotorClient
 from punq import (
     Container,
     Scope,
 )
+from settings.config import Config
 
 
 @lru_cache(1)
@@ -23,8 +23,8 @@ def init_container():
 def _init_container():
     container = Container()
 
-    container.register(BaseChatRepository, MemoryChatRepository, scope=Scope.singleton)
     container.register(CreteChatCommandHandler)
+    container.register(Config, instance=Config(), scope=Scope.singleton)
 
     def init_mediator():
         mediator = Mediator()
@@ -36,6 +36,15 @@ def _init_container():
 
         return mediator
 
+    def init_chat_mongodb_repository():
+        config: Config = container.resolve(Config)
+        client = AsyncIOMotorClient(config.mongodb_connection_uri, serverSelectionTimeoutMS=3000)
+        return MongoDBChatRepository(
+                mongodb_client=client,
+                mongodb_db_name=config.mongodb_chat_database,
+                mongodb_collection_name=config.mongodb_chat_collection,
+        )
+    container.register(BaseChatRepository, factory=init_chat_mongodb_repository, scope=Scope.singleton)
     container.register(Mediator, factory=init_mediator)
 
     return container
