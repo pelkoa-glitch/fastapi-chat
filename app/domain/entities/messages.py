@@ -16,6 +16,7 @@ from domain.values.messages import (
 
 @dataclass(eq=False)
 class Message(BaseEntity):
+    chat_oid: str
     text: Text
 
 
