@@ -17,10 +17,10 @@ from logic.events.base import (
     ET,
     EventHandler,
 )
-from logic.exceptions.mediator import (
-    CommandHandlersNotRegisteredException,
-    EventHandlersNotRegisteredException,
-)
+from logic.exceptions.mediator import CommandHandlersNotRegisteredException
+from logic.mediator.command import CommandMediator
+from logic.mediator.event import EventMediator
+from logic.mediator.query import QueryMediator
 from logic.queries.base import (
     BaseQuery,
     BaseQueryHandler,
@@ -30,7 +30,7 @@ from logic.queries.base import (
 
 
 @dataclass(eq=False)
-class Mediator:
+class Mediator(EventMediator, QueryMediator, CommandMediator):
     events_map: dict[ET, EventHandler] = field(
         default_factory=lambda: defaultdict(list),
         kw_only=True,
@@ -45,7 +45,7 @@ class Mediator:
     )
 
     def register_event(self, event: BaseEvent, event_handlers: Iterable[EventHandler[ET, ER]]):
-        self.events_map[event].append(event_handlers)
+        self.events_map[event].extend(event_handlers)
 
     def register_command(self, command: BaseEvent, command_handlers: Iterable[CommandHandler[CT, CR]]):
         self.events_map[command].extend(command_handlers)
@@ -54,15 +54,14 @@ class Mediator:
         self.query_map[query] = query_handler
 
     async def publish(self, events: Iterable[BaseEvent]) -> Iterable[ER]:
-        event_type = events.__class__
-        handlers = self.events_map.get(event_type)
-
-        if not handlers:
-            raise EventHandlersNotRegisteredException(event_type)
-
         result = []
 
         for event in events:
+            handlers: Iterable[EventHandler] = self.events_map.get(event.__class__)
+
+            for handler in handlers:
+                result.append(await handler.handle(event=event))
+
             result.extend([await handler.handle(event) for handler in handlers])
 
         return result

@@ -21,7 +21,7 @@ from logic.commands.messages import (
     CreateMessageCommand,
 )
 from logic.init import init_container
-from logic.mediator import Mediator
+from logic.mediator.base import Mediator
 from logic.queries.messages import (
     GetChatDetailQuery,
     GetMessagesQuery,
@@ -85,7 +85,7 @@ async def create_message_handler(
 @router.get(
     '/{chat_oid}',
     status_code=status.HTTP_201_CREATED,
-    description='Endpoint return chat and all its messages',
+    description='Endpoint return chat',
     responses={
         status.HTTP_201_CREATED: {'model': ChatDetailSchema},
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
