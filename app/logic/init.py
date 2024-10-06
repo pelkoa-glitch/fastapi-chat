@@ -1,7 +1,10 @@
 from functools import lru_cache
 
 from aiokafka import AIOKafkaProducer
-from domain.events.messages import NewChatCreatedEvent
+from domain.events.messages import (
+    NewChatCreatedEvent,
+    NewMessageRecievedEvent,
+)
 from infra.message_brokers.base import BaseMessageBroker
 from infra.message_brokers.kafka import KafkaMessageBroker
 from infra.repositories.messages.base import (
@@ -18,7 +21,10 @@ from logic.commands.messages import (
     CreateMessageCommand,
     CreateMessageCommandHandler,
 )
-from logic.events.messages import NewChatCreatedEventHandler
+from logic.events.messages import (
+    NewChatCreatedEventHandler,
+    NewMessageRecievedEventHandler,
+)
 from logic.mediator.base import Mediator
 from logic.mediator.event import EventMediator
 from logic.queries.messages import (
@@ -91,6 +97,7 @@ def _init_container() -> Container:
     def init_mediator() -> Mediator:
         mediator = Mediator()
 
+        # command handlers
         create_chat_handler = CreateChatCommandHandler(
             _mediator=mediator,
             chats_repository=container.resolve(BaseChatsRepository),
@@ -100,8 +107,14 @@ def _init_container() -> Container:
             message_repository=container.resolve(BaseMessagesRepository),
             chats_repository=container.resolve(BaseChatsRepository),
         )
+
+        # event handlers
         new_chat_created_event_handler = NewChatCreatedEventHandler(
             broker_topic=config.new_chats_event_topic,
+            message_broker=container.resolve(BaseMessageBroker),
+        )
+        new_message_received_event_handler = NewMessageRecievedEventHandler(
+            broker_topic=config.new_messages_recieved_event_topic,
             message_broker=container.resolve(BaseMessageBroker),
         )
 
@@ -109,11 +122,13 @@ def _init_container() -> Container:
             NewChatCreatedEvent,
             [new_chat_created_event_handler],
         )
-
+        mediator.register_event(
+            NewMessageRecievedEvent,
+            [new_message_received_event_handler],
+        )
         mediator.register_command(
             CreateChatCommand,
             [create_chat_handler],
-
         )
         mediator.register_command(
             CreateMessageCommand,
