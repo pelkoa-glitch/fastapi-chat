@@ -6,14 +6,14 @@ APP_FILE = docker_compose/app.yaml
 APP_CONTAINER = main-app
 STORAGES_FILE = docker_compose/storages.yaml
 STORAGES_CONTAINER = chat-mongodb
-KAFKA_FILE = docker_compose/kafka.yaml
+KAFKA_FILE = docker_compose/messaging.yaml
 KAFKA_CONTAINER =
 
 
 #all containers
 .PHONY: all
 all:
-	${DC} -f ${APP_FILE} ${ENV} -f ${STORAGES_FILE} ${ENV} -f ${KAFKA_FILE} ${ENV} up --build -d
+	${DC} -f ${KAFKA_FILE} ${ENV} -f ${STORAGES_FILE} ${ENV} -f ${APP_FILE} ${ENV} up --build -d
 
 .PHONY: all-down
 all-down:

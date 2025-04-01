@@ -1,6 +1,9 @@
 from functools import lru_cache
 
-from aiokafka import AIOKafkaProducer
+from aiokafka import (
+    AIOKafkaConsumer,
+    AIOKafkaProducer,
+)
 from domain.events.messages import (
     NewChatCreatedEvent,
     NewMessageRecievedEvent,
@@ -88,6 +91,7 @@ def _init_container() -> Container:
     def create_message_broker() -> BaseMessageBroker:
         return KafkaMessageBroker(
             producer=AIOKafkaProducer(bootstrap_servers=config.kafka_url),
+            consumer=AIOKafkaConsumer(bootstrap_servers=config.kafka_url, group_id='chat'),
         )
 
     # Message broker
