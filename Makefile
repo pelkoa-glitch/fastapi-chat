@@ -23,11 +23,11 @@ all-down:
 #app container
 .PHONY: app
 app:
-	${DC} -f ${APP_FILE} ${ENV} up --build -d
+	${DC} -f ${APP_FILE} -f ${KAFKA_FILE} ${ENV} up --build -d
 
 .PHONY: app-down
 app-down:
-	${DC} -f ${APP_FILE} down
+	${DC} -f ${APP_FILE} -f ${KAFKA_FILE} down
 
 .PHONY: app-console
 app-console:
