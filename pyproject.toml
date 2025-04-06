@@ -17,6 +17,7 @@ pydantic-settings = "^2.5.2"
 aiokafka = "^0.11.0"
 orjson = "^3.10.7"
 websockets = "^13.1"
+aiojobs = "^1.4.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -52,12 +53,12 @@ skip_glob=[
     "venv",
     ".venv",
 ]
-known_django=["django","ninja"]
+known_fastapi=["fastapi","starlette"]
 known_first_party=["core"]
 sections=[
     "FUTURE",
     "STDLIB",
-    "DJANGO",
+    "FASTAPI",
     "THIRDPARTY",
     "FIRSTPARTY",
     "LOCALFOLDER",
