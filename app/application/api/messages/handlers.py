@@ -1,3 +1,12 @@
+from fastapi import (
+    Depends,
+    status,
+)
+from fastapi.exceptions import HTTPException
+from fastapi.routing import APIRouter
+
+from punq import Container
+
 from application.api.messages.filters import GetMessagesFilterss
 from application.api.messages.schemas import (
     ChatDetailSchema,
@@ -10,12 +19,6 @@ from application.api.messages.schemas import (
 )
 from application.api.schemas import ErrorSchema
 from domain.exceptions.base import ApplicationException
-from fastapi import (
-    Depends,
-    status,
-)
-from fastapi.exceptions import HTTPException
-from fastapi.routing import APIRouter
 from logic.commands.messages import (
     CreateChatCommand,
     CreateMessageCommand,
@@ -26,7 +29,6 @@ from logic.queries.messages import (
     GetChatDetailQuery,
     GetMessagesQuery,
 )
-from punq import Container
 
 
 router = APIRouter(tags=['Chat'])

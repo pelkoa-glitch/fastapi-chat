@@ -1,6 +1,7 @@
 from dataclasses import asdict
 
 import orjson
+
 from domain.events.base import BaseEvent
 
 

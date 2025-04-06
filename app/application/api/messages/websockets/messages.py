@@ -5,9 +5,10 @@ from fastapi import (
 from fastapi.routing import APIRouter
 from fastapi.websockets import WebSocket
 
+from punq import Container
+
 from infra.websockets.managers import BaseConnectionManager
 from logic.init import init_container
-from punq import Container
 
 
 router = APIRouter(tags=['chats'])

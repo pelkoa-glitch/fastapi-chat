@@ -9,6 +9,7 @@ from aiokafka import (
     AIOKafkaConsumer,
     AIOKafkaProducer,
 )
+
 from infra.message_brokers.base import BaseMessageBroker
 
 

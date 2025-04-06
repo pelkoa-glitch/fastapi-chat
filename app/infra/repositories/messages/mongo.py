@@ -2,6 +2,8 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import Iterable
 
+from motor.core import AgnosticClient
+
 from domain.entities.messages import (
     Chat,
     Message,
@@ -17,7 +19,6 @@ from infra.repositories.messages.converters import (
     convert_message_document_to_entity,
     convert_message_entity_to_document,
 )
-from motor.core import AgnosticClient
 
 
 @dataclass

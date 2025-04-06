@@ -1,5 +1,6 @@
-from infra.repositories.filters.messages import GetMessagesFilters as GetMessagesInfraFilters
 from pydantic import BaseModel
+
+from infra.repositories.filters.messages import GetMessagesFilters as GetMessagesInfraFilters
 
 
 class GetMessagesFilterss(BaseModel):
