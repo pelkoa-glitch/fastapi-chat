@@ -78,3 +78,7 @@ class ChatDetailSchema(BaseModel):
 
 class GetMessagesQueryResponseSchema(BaseQueryResponseSchema):
     items: list[MessageDetailSchema]
+
+
+class GetAllChatsQueryResponceSchema(BaseQueryResponseSchema):
+    items: list[ChatDetailSchema]
