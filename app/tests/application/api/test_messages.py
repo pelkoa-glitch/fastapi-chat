@@ -54,3 +54,20 @@ async def test_create_chat_fail_text_empty(
     json_data = response.json()
 
     assert json_data['detail']['error']
+
+
+@pytest.mark.asyncio
+async def test_create_message_success(
+    app: FastAPI,
+    client: TestClient,
+    faker: Faker,
+):
+    url = app.url_path_for('create_message_handler')
+    chat_oid = 'acbb3257-6196-4965-8d4d-4f323f5199b2'
+    text = faker.text()[:100]
+    response: Response = client.post(url=url, chat_oid=chat_oid, json={'text': text})
+
+    assert response.is_success
+    json_data = response.json()
+
+    assert json_data['text'] == text

@@ -7,8 +7,6 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 22181:2181
-    networks:
-      - backend
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -17,7 +15,6 @@ services:
       - zookeeper
     ports:
       - 29092:29092
-    hostname: kafka
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -25,8 +22,6 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    networks:
-      - backend
     healthcheck:
       test: nc -z localhost 29092
 
@@ -40,11 +35,3 @@ services:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
-    links:
-      - kafka
-      - zookeeper
-    networks:
-      - backend
-networks:
-  backend:
-    driver: bridge

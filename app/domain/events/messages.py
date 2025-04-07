@@ -17,3 +17,9 @@ class NewChatCreatedEvent(BaseEvent):
     title: ClassVar[str] = 'New Chat Created'
     chat_oid: str
     chat_title: str
+
+
+@dataclass
+class ChatDeletedEvent(BaseEvent):
+    title: ClassVar[str] = 'Chat Has Been Deleted'
+    chat_oid: str

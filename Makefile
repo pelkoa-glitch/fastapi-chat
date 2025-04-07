@@ -1,70 +1,54 @@
 DC = docker compose
+APP_DEV = docker_compose/app.dev.yaml
 EXEC = docker exec -it
 LOGS = docker logs
-ENV = --env-file .env
-APP_FILE = docker_compose/app.yaml
+KAFKA = docker_compose/kafka.yaml
+MONGO = docker_compose/mongo.yaml
+MONGO_EXPRESS = docker_compose/mongo-express.yaml
 APP_CONTAINER = main-app
-STORAGES_FILE = docker_compose/storages.yaml
-STORAGES_CONTAINER = chat-mongodb
-KAFKA_FILE = docker_compose/messaging.yaml
-KAFKA_CONTAINER =
+ENV = --env-file .env
 
 
-#all containers
 .PHONY: all
 all:
-	${DC} -f ${KAFKA_FILE} ${ENV} -f ${STORAGES_FILE} ${ENV} -f ${APP_FILE} ${ENV} up --build -d
+	${DC} -f ${APP_DEV} ${ENV}  -f ${KAFKA} ${ENV}  -f ${MONGO} ${ENV} -f ${MONGO_EXPRESS} ${ENV} up --build -d
 
 .PHONY: all-down
 all-down:
-	${DC} -f ${APP_FILE} ${ENV} -f ${STORAGES_FILE} ${ENV} -f ${KAFKA_FILE} ${ENV} down
+	${DC} -f ${APP_DEV} -f ${KAFKA} -f ${MONGO} -f ${MONGO_EXPRESS} ${ENV} down
 
-
-#app container
 .PHONY: app
 app:
-	${DC} -f ${APP_FILE} -f ${KAFKA_FILE} ${ENV} up --build -d
-
-.PHONY: app-down
-app-down:
-	${DC} -f ${APP_FILE} -f ${KAFKA_FILE} down
-
-.PHONY: app-console
-app-console:
-	${EXEC} ${APP_CONTAINER} bash
-
+	${DC} -f ${APP_DEV} -f ${KAFKA} ${ENV} up --build -d
 
 .PHONY: app-logs
 app-logs:
-	${LOGS} ${APP_CONTAINER} -f
+	${LOGS} -f ${APP_CONTAINER} -f
+
+.PHONY: storages
+storages:
+	${DC} -f ${MONGO} ${ENV} up --build -d
+
+.PHONY: app-down
+down-dev:
+	${DC} -f ${APP_DEV} -f ${KAFKA} ${ENV} down
+
+.PHONY: down
+down:
+	${DC} -f ${APP_DEV} -f ${KAFKA} -f ${MONGO} -f ${MONGO_EXPRESS} ${ENV} down
+
+.PHONY: ui
+ui:
+	${DC} -f ${MONGO_EXPRESS} ${ENV} up --build -d
+
+.PHONY: purge
+purge:
+	${DC} -f ${KAFKA} -f ${MONGO} -f ${MONGO_EXPRESS} ${ENV} down -v
+
+.PHONY: shell
+shell:
+	${EXEC} ${APP_CONTAINER} bash
 
 .PHONY: test
 test:
 	${EXEC} ${APP_CONTAINER} pytest
-
-
-#storages container
-.PHONY: storages
-storages:
-	${DC} -f ${STORAGES_FILE} ${ENV} up --build -d
-
-.PHONY: storages-down
-storages-down:
-	${DC} -f ${STORAGES_FILE} down
-
-.PHONY: storages-logs
-storages-logs:
-	${LOGS} ${STORAGES_CONTAINER} -f
-
-# Kafka container
-.PHONY: kafka
-kafka:
-	${DC} -f ${KAFKA_FILE} ${ENV} up --build -d
-
-.PHONY: kafka-down
-kafka-down:
-	${DC} -f ${KAFKA_FILE} ${ENV} down
-
-.PHONY: kafka-logs
-kafka-logs:
-	${DC} -f ${KAFKA_FILE} logs -f

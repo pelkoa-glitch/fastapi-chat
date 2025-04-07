@@ -2,6 +2,7 @@ from dataclasses import (
     dataclass,
     field,
 )
+from typing import List
 
 from domain.entities.messages import Chat
 from infra.repositories.messages.base import BaseChatsRepository
@@ -35,3 +36,6 @@ class MemoryChatRepository(BaseChatsRepository):
 
     async def add_chat(self, chat: Chat) -> None:
         self._saved_chats.append(chat)
+
+    async def get_all_chats(self) -> List[Chat]:
+        return self._saved_chats

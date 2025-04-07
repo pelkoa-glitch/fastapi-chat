@@ -1,3 +1,4 @@
+import asyncio
 from abc import (
     ABC,
     abstractmethod,
@@ -27,19 +28,42 @@ class BaseConnectionManager(ABC):
         ...
 
     @abstractmethod
-    async def send_all(self, key: str, bytes_: bytes):
+    async def send_all(self, key: str, bytes_: bytes) -> None:
+        ...
+
+    @abstractmethod
+    async def disconnect_all(self, key: str) -> None:
         ...
 
 
 @dataclass
 class ConnectionManager(BaseConnectionManager):
+    lock_map: dict[str, asyncio.Lock] = field(default_factory=dict)
+
     async def accept_connection(self, websocket: WebSocket, key: str) -> None:
         await websocket.accept()
-        self.connections_map[key].append(websocket)
+
+        if key not in self.lock_map:
+            self.lock_map[key] = asyncio.Lock()
+
+        async with self.lock_map[key]:
+            # TODO: проверять не находится ли чат в процессе удаления
+            self.connections_map[key].append(websocket)
 
     async def remove_connection(self, websocket: WebSocket, key: str) -> None:
-        self.connections_map[key].remove(websocket)
+        async with self.lock_map[key]:
+            self.connections_map[key].remove(websocket)
 
     async def send_all(self, key: str, bytes_: bytes) -> None:
         for websocket in self.connections_map[key]:
             await websocket.send_bytes(bytes_)
+
+    async def disconnect_all(self, key: str) -> None:
+        async with self.lock_map[key]:
+            for websocket in self.connections_map[key]:
+                await websocket.send_json(
+                    {
+                        'message': 'Chat has been deleted',
+                    },
+                )
+                await websocket.close()

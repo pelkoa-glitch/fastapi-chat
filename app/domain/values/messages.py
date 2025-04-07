@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from domain.exceptions.messages import (
     EmptyTextException,
+    TextTooLongException,
     TitleTooLongException,
 )
 from domain.values.base import BaseValueObject
@@ -14,6 +15,8 @@ class Text(BaseValueObject):
     def validate(self):
         if not self.value:
             raise EmptyTextException('Text cannot be empty')
+        if len(self.value) > 255:
+            raise TextTooLongException(self.value)
 
     def as_generic_type(self):
         return str(self.value)
