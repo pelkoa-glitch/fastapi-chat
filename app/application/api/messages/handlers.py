@@ -48,7 +48,7 @@ router = APIRouter(tags=['Chat'])
         status.HTTP_201_CREATED: {'model': CreateChatResponseSchema},
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
     },
-
+    summary='Create chat',
 )
 async def create_chat_handler(
     schema: CreateChatRequestSchema,
@@ -73,6 +73,7 @@ async def create_chat_handler(
         status.HTTP_201_CREATED: {'model': CreateMessageResponseSchema},
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
     },
+    summary='Add message to a chat',
 )
 async def create_message_handler(
     chat_oid: str,
@@ -98,6 +99,7 @@ async def create_message_handler(
         status.HTTP_201_CREATED: {'model': ChatDetailSchema},
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
     },
+    summary='Get chat',
 )
 async def get_chat_with_messages_handler(
     chat_oid: str,
@@ -117,11 +119,12 @@ async def get_chat_with_messages_handler(
 @router.get(
     '/{chat_oid}/messages',
     status_code=status.HTTP_201_CREATED,
-    description='Endpoint return all messages in chat',
+    description='Endpoint return all messages from chat',
     responses={
         status.HTTP_201_CREATED: {'model': GetMessagesQueryResponseSchema},
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
     },
+    summary='Get all messages from chat',
 )
 async def get_chat_messages_handler(
     chat_oid: str,
