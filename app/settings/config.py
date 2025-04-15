@@ -12,3 +12,4 @@ class Config(BaseSettings):
     new_messages_recieved_event_topic: str = Field(default='new-messages')
     chat_deleted_topic: str = Field(default='chat-deleted-topic')
     kafka_url: str = Field(alias='KAFKA_URL')
+    new_listener_added_topic: str = Field(default='listener-added-topic')

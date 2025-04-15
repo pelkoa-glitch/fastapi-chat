@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from application.api.schemas import BaseQueryResponseSchema
 from domain.entities.messages import (
     Chat,
+    ChatListener,
     Message,
 )
 
@@ -74,6 +75,18 @@ class ChatDetailSchema(BaseModel):
             ],
 
         )
+
+
+class AddTelegramListenerSchema(BaseModel):
+    telegram_chat_id: str
+
+
+class AddTelegramListenerResponseSchema(BaseModel):
+    listener_id: str
+
+    @classmethod
+    def from_entity(cls, listener: ChatListener) -> 'AddTelegramListenerResponseSchema':
+        return cls(listener_id=listener.oid)
 
 
 class GetMessagesQueryResponseSchema(BaseQueryResponseSchema):
