@@ -3,6 +3,7 @@ from typing import Iterable
 
 from domain.entities.messages import (
     Chat,
+    ChatListener,
     Message,
 )
 from infra.repositories.filters.messages import (
@@ -37,6 +38,11 @@ class GetAllChatsQuery(BaseQuery):
 
 
 @dataclass(frozen=True)
+class GetAllChatListenersQuery(BaseQuery):
+    chat_oid: str
+
+
+@dataclass(frozen=True)
 class GetChatDetailQueryHandler(BaseQueryHandler):
     chats_repository: BaseChatsRepository
 
@@ -66,3 +72,17 @@ class GetAllChatsQueryHandler(BaseQueryHandler[GetAllChatsQuery, Iterable[Chat]]
 
     async def handle(self, query: GetAllChatsQuery) -> Iterable[Chat]:   # type: ignore
         return await self.chats_repository.get_all_chats(filters=query.filters)
+
+
+@dataclass(frozen=True)
+class GetAllChatListenersQueryHandler(BaseQueryHandler[GetAllChatListenersQuery, Iterable[ChatListener]]):
+    chats_repository: BaseChatsRepository
+
+    async def handle(self, query: GetAllChatListenersQuery) -> ChatListener:
+        # TODO: убрать два запроса
+        chat = await self.chats_repository.get_chat_by_oid(oid=query.chat_oid)
+
+        if not chat:
+            raise ChatNotFoundException(chat_oid=query.chat_oid)
+
+        return await self.chats_repository.get_all_chat_listeners(chat_oid=query.chat_oid)
