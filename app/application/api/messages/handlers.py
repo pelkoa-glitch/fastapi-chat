@@ -97,7 +97,7 @@ async def create_message_handler(
 
 
 @router.get(
-    '/{chat_oid}',
+    '/{chat_oid}/',
     status_code=status.HTTP_201_CREATED,
     description='Endpoint return chat',
     responses={
@@ -207,7 +207,7 @@ async def delete_chat_handler(
 
 
 @router.post(
-    '/{chat_oid}/listeners',
+    '/{chat_oid}/listeners/',
     status_code=status.HTTP_201_CREATED,
     summary='Add telegram support listeners to chat',
     description='Add telegram support listeners to chat',
