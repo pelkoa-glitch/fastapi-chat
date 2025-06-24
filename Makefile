@@ -51,4 +51,4 @@ shell:
 
 .PHONY: test
 test:
-	${EXEC} ${APP_CONTAINER} pytest
+	${EXEC} ${APP_CONTAINER} pytest -s

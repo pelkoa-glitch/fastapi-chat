@@ -31,17 +31,17 @@ class BaseChatsRepository(ABC):
     async def get_all_chats(self, limit: int, offset: int) -> Iterable[Chat]:
         ...
 
-    @abstractmethod
-    async def delete_chat_by_oid(self, chat_oid: str) -> None:
-        ...
+    # @abstractmethod
+    # async def delete_chat_by_oid(self, chat_oid: str) -> None:
+    #     ...
 
-    @abstractmethod
-    async def add_telegram_listener(self, chat_oid: str, telegram_chat_id: str) -> None:
-        ...
+    # @abstractmethod
+    # async def add_telegram_listener(self, chat_oid: str, telegram_chat_id: str) -> None:
+    #     ...
 
-    @abstractmethod
-    async def get_all_chat_listeners(self, chat_oid: str) -> Iterable[ChatListener]:
-        ...
+    # @abstractmethod
+    # async def get_all_chat_listeners(self, chat_oid: str) -> Iterable[ChatListener]:
+    #     ...
 
 
 @dataclass
