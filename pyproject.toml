@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "MIT"
 authors = ["pelkoa-glitch <hvngmvnvibe@gmail.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"

@@ -47,7 +47,6 @@ class ConnectionManager(BaseConnectionManager):
             self.lock_map[key] = asyncio.Lock()
 
         async with self.lock_map[key]:
-            # TODO: проверять не находится ли чат в процессе удаления
             self.connections_map[key].append(websocket)
 
     async def remove_connection(self, websocket: WebSocket, key: str) -> None:

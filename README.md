@@ -25,7 +25,7 @@
         cd fastapi-chat -  go to project folder
         poetry install  -  install dependencies
         poetry shell    -  activate python venv
-        make app        -  run app container
+        make all        -  run all containers
 
 5. Api docs on http://localhost:8000/api/docs
 

@@ -79,7 +79,6 @@ class GetAllChatListenersQueryHandler(BaseQueryHandler[GetAllChatListenersQuery,
     chats_repository: BaseChatsRepository
 
     async def handle(self, query: GetAllChatListenersQuery) -> ChatListener:
-        # TODO: убрать два запроса
         chat = await self.chats_repository.get_chat_by_oid(oid=query.chat_oid)
 
         if not chat:
