@@ -98,10 +98,10 @@ async def create_message_handler(
 
 @router.get(
     '/{chat_oid}/',
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     description='Endpoint return chat',
     responses={
-        status.HTTP_201_CREATED: {'model': ChatDetailSchema},
+        status.HTTP_200_OK: {'model': ChatDetailSchema},
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
     },
     summary='Get chat',
@@ -123,10 +123,10 @@ async def get_chat_with_messages_handler(
 
 @router.get(
     '/{chat_oid}/messages',
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     description='Endpoint return all messages from chat',
     responses={
-        status.HTTP_201_CREATED: {'model': GetMessagesQueryResponseSchema},
+        status.HTTP_200_OK: {'model': GetMessagesQueryResponseSchema},
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
     },
     summary='Get all messages from chat',
@@ -157,10 +157,10 @@ async def get_chat_messages_handler(
 
 @router.get(
     '/',
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     description='Endpoint return all chats',
     responses={
-        status.HTTP_201_CREATED: {'model': GetAllChatsQueryResponceSchema},
+        status.HTTP_200_OK: {'model': GetAllChatsQueryResponceSchema},
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
     },
     summary='Get all chats',
@@ -236,10 +236,10 @@ async def add_chat_listener_handler(
 
 @router.get(
     '/{chat_oid}/listeners/',
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     description='Get all chat listeners',
     responses={
-        status.HTTP_201_CREATED: {'model': list[ChatListenerItemSchema]},
+        status.HTTP_200_OK: {'model': list[ChatListenerItemSchema]},
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
     },
     summary='Get all chat listeners',
