@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import (
     Depends,
     status,
@@ -19,7 +21,7 @@ from application.api.messages.schemas import (
     CreateChatRequestSchema,
     CreateChatResponseSchema,
     CreateMessageResponseSchema,
-    CreateMessageScherma,
+    CreateMessageSchema,
     GetAllChatsQueryResponceSchema,
     GetMessagesQueryResponseSchema,
     MessageDetailSchema,
@@ -42,6 +44,8 @@ from logic.queries.messages import (
 )
 
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter(tags=['Chat'])
 
 
@@ -54,6 +58,7 @@ router = APIRouter(tags=['Chat'])
         status.HTTP_400_BAD_REQUEST: {'model': ErrorSchema},
     },
     summary='Create chat',
+    operation_id='chatCreated',
 )
 async def create_chat_handler(
     schema: CreateChatRequestSchema,
@@ -65,8 +70,9 @@ async def create_chat_handler(
     try:
         chat, *_ = await mediator.handle_command(CreateChatCommand(title=schema.title))
     except ApplicationException as exception:
+        logger.error(f'{exception.__class__},{exception.message}')
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'error': exception.message})
-
+    logger.info(f'Чат с id={schema.title} создан')
     return CreateChatResponseSchema.from_entity(chat)
 
 
@@ -82,14 +88,20 @@ async def create_chat_handler(
 )
 async def create_message_handler(
     chat_oid: str,
-    schema: CreateMessageScherma,
+    schema: CreateMessageSchema,
     container: Container = Depends(init_container),
 ) -> CreateMessageResponseSchema:
     """Add a new message to a chat."""
     mediator: Mediator = container.resolve(Mediator)
 
     try:
-        message, *_ = await mediator.handle_command(CreateMessageCommand(text=schema.text, chat_oid=chat_oid))
+        message, *_ = await mediator.handle_command(
+            CreateMessageCommand(
+                text=schema.text,
+                chat_oid=chat_oid,
+                is_manager=schema.is_manager,
+            ),
+        )
     except ApplicationException as exception:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'error': exception.message})
 

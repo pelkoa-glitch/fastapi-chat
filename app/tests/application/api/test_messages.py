@@ -67,7 +67,7 @@ async def test_create_message_chat_does_not_exist(
     url = app.url_path_for('create_message_handler', chat_oid=chat_oid)
 
     text = faker.text()[:100]
-    response: Response = client.post(url=url, json={'text': text})
+    response: Response = client.post(url=url, json={'text': text, 'is_manager': False})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, response.json()
     json_data = response.json()

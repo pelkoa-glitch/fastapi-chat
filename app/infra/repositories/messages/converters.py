@@ -20,6 +20,7 @@ def convert_message_entity_to_document(message: Message) -> dict:
         'text': message.text.as_generic_type(),
         'created_at': message.created_at,
         'chat_oid': message.chat_oid,
+        'is_manager': message.is_manager,
     }
 
 
@@ -37,6 +38,7 @@ def convert_message_document_to_entity(message_document: Mapping[str, Any]) -> M
         text=Text(value=message_document['text']),
         created_at=message_document['created_at'],
         chat_oid=message_document['chat_oid'],
+        is_manager=message_document['is_manager'],
     )
 
 

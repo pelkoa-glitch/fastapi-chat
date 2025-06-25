@@ -21,6 +21,7 @@ from domain.values.messages import (
 class Message(BaseEntity):
     chat_oid: str
     text: Text
+    is_manager: bool
 
 
 @dataclass(eq=False)
@@ -49,6 +50,7 @@ class Chat(BaseEntity):
                 message_text=message.text.as_generic_type(),
                 chat_oid=self.oid,
                 message_oid=message.oid,
+                is_manager=message.is_manager,
             ),
         )
 

@@ -44,10 +44,10 @@ class Mediator(EventMediator, QueryMediator, CommandMediator):
         kw_only=True,
     )
 
-    def register_event(self, event: BaseEvent, event_handlers: Iterable[EventHandler[ET, ER]]):
+    def register_event(self, event: ET, event_handlers: Iterable[EventHandler[ET, ER]]):
         self.events_map[event].extend(event_handlers)
 
-    def register_command(self, command: BaseEvent, command_handlers: Iterable[CommandHandler[CT, CR]]):
+    def register_command(self, command: CT, command_handlers: Iterable[CommandHandler[CT, CR]]):
         self.commands_map[command].extend(command_handlers)
 
     def register_query(self, query: QT, query_handler: BaseQueryHandler[QT, QR]) -> QR:
@@ -57,7 +57,7 @@ class Mediator(EventMediator, QueryMediator, CommandMediator):
         result = []
 
         for event in events:
-            handlers: Iterable[EventHandler] = self.events_map.get(event.__class__)
+            handlers: Iterable[EventHandler] = self.events_map[event.__class__]
             result.extend([await handler.handle(event) for handler in handlers])
 
         return result

@@ -9,7 +9,6 @@ from dataclasses import (
 )
 from typing import Iterable
 
-from domain.events.base import BaseEvent
 from logic.events.base import (
     ER,
     ET,
@@ -25,9 +24,9 @@ class EventMediator(ABC):
     )
 
     @abstractmethod
-    def register_event(self, event: BaseEvent, event_handlers: Iterable[EventHandler[ET, ER]]):
+    def register_event(self, event: ET, event_handlers: Iterable[EventHandler[ET, ER]]):
         ...
 
     @abstractmethod
-    async def publish(self, events: Iterable[BaseEvent]) -> Iterable[ER]:
+    async def publish(self, events: Iterable[ET]) -> Iterable[ER]:
         ...
