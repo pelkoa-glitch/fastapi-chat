@@ -25,17 +25,21 @@ app:
 app-logs:
 	${LOGS} -f ${APP_CONTAINER} -f
 
-.PHONY: storages
-storages:
-	${DC} -f ${MONGO} ${ENV} up --build -d
-
 .PHONY: app-down
 down-dev:
 	${DC} -f ${APP_DEV} -f ${KAFKA} ${ENV} down
 
-.PHONY: down
-down:
-	${DC} -f ${APP_DEV} -f ${KAFKA} -f ${MONGO} -f ${MONGO_EXPRESS} ${ENV} down
+.PHONY: kafka
+kafka:
+	${DC} -f ${KAFKA} ${ENV} up --build -d
+
+.PHONY: kafka-down
+kafka-down:
+	${DC} -f ${KAFKA} ${ENV} down
+
+.PHONY: storages
+storages:
+	${DC} -f ${MONGO} ${ENV} up --build -d
 
 .PHONY: ui
 ui:
