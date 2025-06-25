@@ -9,9 +9,7 @@ from dataclasses import (
 )
 from typing import Iterable
 
-from domain.events.base import BaseEvent
 from logic.commands.base import (
-    BaseCommand,
     CommandHandler,
     CR,
     CT,
@@ -26,9 +24,9 @@ class CommandMediator(ABC):
     )
 
     @abstractmethod
-    def register_command(self, command: BaseEvent, command_handlers: Iterable[CommandHandler[CT, CR]]):
+    def register_command(self, command: CT, command_handlers: Iterable[CommandHandler[CT, CR]]):
         ...
 
     @abstractmethod
-    async def handle_command(self, command: BaseCommand) -> Iterable[CR]:
+    async def handle_command(self, command: CT) -> Iterable[CR]:
         ...

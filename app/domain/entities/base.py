@@ -35,7 +35,7 @@ class BaseEntity(ABC):
         self._events.append(event)
 
     def pull_events(self) -> list[BaseEvent]:
-        regisstered_events = copy(self._events)
+        registered_events = copy(self._events)
         self._events.clear()
 
-        return regisstered_events
+        return registered_events

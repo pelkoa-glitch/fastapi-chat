@@ -31,8 +31,8 @@ async def lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title='Simple Fastapi Kafka Chat',
-        description='FastAPI + KAFKA + DDD,',
+        title='Suppot Chat',
+        description='',
         docs_url='/api/docs',
         debug=True,
         lifespan=lifespan,

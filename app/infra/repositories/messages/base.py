@@ -7,7 +7,6 @@ from typing import Iterable
 
 from domain.entities.messages import (
     Chat,
-    ChatListener,
     Message,
 )
 from infra.repositories.filters.messages import GetMessagesFilters

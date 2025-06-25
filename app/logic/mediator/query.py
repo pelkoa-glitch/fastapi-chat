@@ -8,7 +8,6 @@ from dataclasses import (
 )
 
 from logic.queries.base import (
-    BaseQuery,
     BaseQueryHandler,
     QR,
     QT,
@@ -27,5 +26,5 @@ class QueryMediator(ABC):
         ...
 
     @abstractmethod
-    async def handle_query(self, query: BaseQuery) -> QR:
+    async def handle_query(self, query: QT) -> QR:
         ...

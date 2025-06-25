@@ -26,19 +26,22 @@ class CreateChatResponseSchema(BaseModel):
         )
 
 
-class CreateMessageScherma(BaseModel):
+class CreateMessageSchema(BaseModel):
     text: str
+    is_manager: bool = False
 
 
 class CreateMessageResponseSchema(BaseModel):
     text: str
     oid: str
+    is_manager: bool
 
     @classmethod
     def from_entity(cls, message: Message) -> 'CreateMessageResponseSchema':
         return cls(
             text=message.text.as_generic_type(),
             oid=message.oid,
+            is_manager=message.is_manager,
         )
 
 
@@ -46,6 +49,7 @@ class MessageDetailSchema(BaseModel):
     oid: str
     text: str
     created_at: datetime
+    is_manager: bool
 
     @classmethod
     def from_entity(cls, message: Message) -> 'MessageDetailSchema':
@@ -53,6 +57,7 @@ class MessageDetailSchema(BaseModel):
             oid=message.oid,
             text=message.text.as_generic_type(),
             created_at=message.created_at,
+            is_manager=message.is_manager,
         )
 
 
