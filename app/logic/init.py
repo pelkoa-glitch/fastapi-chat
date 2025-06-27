@@ -79,7 +79,7 @@ def _init_container() -> Container:
 
     # Motor client
     def create_modgodb_client() -> AsyncIOMotorClient:
-        return AsyncIOMotorClient(config.mongodb_connection_uri, serverSelectionTimeoutMS=3000)
+        return AsyncIOMotorClient(config.MONGO_DB_CONNECTION_URI, serverSelectionTimeoutMS=3000)
 
     container.register(AsyncIOMotorClient, factory=create_modgodb_client, scope=Scope.singleton)
     client = container.resolve(AsyncIOMotorClient)
@@ -88,15 +88,15 @@ def _init_container() -> Container:
     def init_chats_mongodb_repository() -> MongoDBChatsRepository:
         return MongoDBChatsRepository(
                 mongodb_client=client,
-                mongodb_db_name=config.mongodb_chat_database,
-                mongodb_collection_name=config.mongodb_chat_collection,
+                mongodb_db_name=config.MONGODB_DATABASE,
+                mongodb_collection_name=config.MONGODB_CHAT_COLLECTION,
         )
 
     def init_messages_mongodb_repository() -> MongoDBMessagesRepository:
         return MongoDBMessagesRepository(
                 mongodb_client=client,
-                mongodb_db_name=config.mongodb_chat_database,
-                mongodb_collection_name=config.mongodb_messages_collection,
+                mongodb_db_name=config.MONGODB_DATABASE,
+                mongodb_collection_name=config.MONGODB_MESSAGES_COLLECTION,
         )
 
     container.register(BaseChatsRepository, factory=init_chats_mongodb_repository, scope=Scope.singleton)
@@ -113,9 +113,9 @@ def _init_container() -> Container:
 
     def create_message_broker() -> BaseMessageBroker:
         return KafkaMessageBroker(
-            producer=AIOKafkaProducer(bootstrap_servers=config.kafka_url),
+            producer=AIOKafkaProducer(bootstrap_servers=config.KAFKA_URL),
             consumer=AIOKafkaConsumer(
-                bootstrap_servers=config.kafka_url,
+                bootstrap_servers=config.KAFKA_URL,
                 group_id=f'chats-{uuid4()}',
                 metadata_max_age_ms=30000,
             ),

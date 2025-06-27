@@ -1,4 +1,3 @@
-import logging
 
 from fastapi import (
     Depends,
@@ -44,8 +43,6 @@ from logic.queries.messages import (
 )
 
 
-logger = logging.getLogger(__name__)
-
 router = APIRouter(tags=['Chat'])
 
 
@@ -70,9 +67,7 @@ async def create_chat_handler(
     try:
         chat, *_ = await mediator.handle_command(CreateChatCommand(title=schema.title))
     except ApplicationException as exception:
-        logger.error(f'{exception.__class__},{exception.message}')
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'error': exception.message})
-    logger.info(f'Чат с id={schema.title} создан')
     return CreateChatResponseSchema.from_entity(chat)
 
 
