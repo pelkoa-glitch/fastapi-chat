@@ -43,7 +43,7 @@ def create_app() -> FastAPI:
         title='Suppot Chat',
         description='',
         docs_url='/api/docs',
-        debug=True,
+        debug=False,
         lifespan=lifespan,
     )
     app.include_router(message_router, prefix='/chats')

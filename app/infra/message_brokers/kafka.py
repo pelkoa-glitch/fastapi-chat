@@ -2,7 +2,10 @@ from dataclasses import (
     dataclass,
     field,
 )
-from typing import AsyncIterator
+from typing import (
+    Any,
+    AsyncIterator,
+)
 
 import orjson
 from aiokafka import (
@@ -25,7 +28,7 @@ class KafkaMessageBroker(BaseMessageBroker):
     async def send_message(self, key: str, topic: str, value: bytes) -> None:
         await self.producer.send(topic=topic, key=key, value=value)
 
-    async def start_consuming(self, topic: str) -> AsyncIterator[dict]:
+    async def start_consuming(self, topic: str) -> AsyncIterator[dict[Any, Any]]:
         self.consumer.subscribe(topics=[topic])
 
         async for message in self.consumer:

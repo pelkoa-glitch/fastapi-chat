@@ -3,13 +3,20 @@ from abc import (
     abstractmethod,
 )
 from dataclasses import dataclass
-from typing import Iterable
+from typing import (
+    Any,
+    Iterable,
+    List,
+)
 
 from domain.entities.messages import (
     Chat,
     Message,
 )
-from infra.repositories.filters.messages import GetMessagesFilters
+from infra.repositories.filters.messages import (
+    GetAllChatsFilters,
+    GetMessagesFilters,
+)
 
 
 @dataclass
@@ -27,12 +34,12 @@ class BaseChatsRepository(ABC):
         ...
 
     @abstractmethod
-    async def get_all_chats(self, limit: int, offset: int) -> Iterable[Chat]:
+    async def get_all_chats(self, filters: GetAllChatsFilters) -> tuple[List[Chat], Any]:
         ...
 
-    # @abstractmethod
-    # async def delete_chat_by_oid(self, chat_oid: str) -> None:
-    #     ...
+    @abstractmethod
+    async def delete_chat_by_oid(self, chat_oid: str) -> None:
+        ...
 
     # @abstractmethod
     # async def add_telegram_listener(self, chat_oid: str, telegram_chat_id: str) -> None:
@@ -40,7 +47,7 @@ class BaseChatsRepository(ABC):
 
     # @abstractmethod
     # async def get_all_chat_listeners(self, chat_oid: str) -> Iterable[ChatListener]:
-    #     ...
+        ...
 
 
 @dataclass
