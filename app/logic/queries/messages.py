@@ -70,7 +70,7 @@ class GetMessagesQueryHandler(BaseQueryHandler):
 class GetAllChatsQueryHandler(BaseQueryHandler[GetAllChatsQuery, Iterable[Chat]]):
     chats_repository: BaseChatsRepository
 
-    async def handle(self, query: GetAllChatsQuery) -> Iterable[Chat]:   # type: ignore
+    async def handle(self, query: GetAllChatsQuery) -> Iterable[Chat]:
         return await self.chats_repository.get_all_chats(filters=query.filters)
 
 

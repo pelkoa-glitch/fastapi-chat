@@ -1,6 +1,10 @@
 from abc import ABC
 from dataclasses import dataclass
-from typing import Iterable
+from typing import (
+    Any,
+    Iterable,
+    List,
+)
 
 from motor.core import AgnosticClient
 
@@ -53,7 +57,7 @@ class MongoDBChatsRepository(BaseMongoDBRepository, BaseChatsRepository):
     async def add_chat(self, chat: Chat) -> None:
         await self._collection.insert_one(convert_chat_entity_to_document(chat))
 
-    async def get_all_chats(self, filters: GetAllChatsFilters) -> Iterable[Chat]:
+    async def get_all_chats(self, filters: GetAllChatsFilters) -> tuple[List[Chat], Any]:
         cursor = self._collection.find().skip(filters.offset).limit(filters.limit)
 
         chats = [

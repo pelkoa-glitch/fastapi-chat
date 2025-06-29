@@ -5,13 +5,13 @@ import pytest
 
 from application.api.main import create_app
 from logic.init import init_container
-from tests.fixtures import init_dummy_container
+from tests.init_for_tests import init_container as test_container
 
 
 @pytest.fixture
 def app() -> FastAPI:
     app = create_app()
-    app.dependency_overrides[init_container] = init_dummy_container
+    app.dependency_overrides[init_container] = test_container
 
     return app
 

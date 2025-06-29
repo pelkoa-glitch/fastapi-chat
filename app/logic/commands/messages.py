@@ -54,7 +54,7 @@ class CreateMessageCommand(BaseCommand):
 
 
 @dataclass(frozen=True)
-class CreateMessageCommandHandler(CommandHandler[CreateMessageCommand, Chat]):
+class CreateMessageCommandHandler(CommandHandler[CreateMessageCommand, Message]):
     message_repository: BaseMessagesRepository
     chats_repository: BaseChatsRepository
 

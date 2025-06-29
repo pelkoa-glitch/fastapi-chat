@@ -2,9 +2,13 @@ from dataclasses import (
     dataclass,
     field,
 )
-from typing import List
+from typing import (
+    Any,
+    List,
+)
 
 from domain.entities.messages import Chat
+from infra.repositories.filters.messages import GetAllChatsFilters
 from infra.repositories.messages.base import BaseChatsRepository
 
 
@@ -24,6 +28,9 @@ class MemoryChatRepository(BaseChatsRepository):
         except StopIteration:
             return None
 
+    async def add_chat(self, chat: Chat) -> None:
+        self._saved_chats.append(chat)
+
     async def check_chat_exists_by_title(self, title: str) -> bool:
         try:
             return bool(
@@ -34,8 +41,11 @@ class MemoryChatRepository(BaseChatsRepository):
         except StopIteration:
             return False
 
-    async def add_chat(self, chat: Chat) -> None:
-        self._saved_chats.append(chat)
+    async def get_all_chats(self, filters: GetAllChatsFilters) -> tuple[List[Chat], Any]:
+        return self._saved_chats, len(self._saved_chats)
 
-    async def get_all_chats(self) -> List[Chat]:
-        return self._saved_chats
+    async def delete_chat_by_oid(self, chat_oid: str) -> None:
+        chat = await self.get_chat_by_oid(chat_oid)
+
+        if chat:
+            self._saved_chats.remove(chat)
