@@ -97,7 +97,7 @@ async def test_delete_chat_by_oid_success(
 
 
 @pytest.mark.asyncio
-async def test_check_delete_chat_thad_not_exists(
+async def test_check_delete_chat_that_not_exists(
     app: FastAPI,
     client: TestClient,
 ):

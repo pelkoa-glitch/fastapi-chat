@@ -1,6 +1,10 @@
-# FastAPI chat
-
-### Fastapi chat:
+# Support Chat Service 
+- ### A service that processes user requests to technical support
+## Here UML Sequence Diagram of basic usecase
+- Client send message to Manager 
+- Manager answer to Client via telegram
+- Client recieve messages via websocket
+![UML](docs/support_chat_uml_sd.svg)
 
 
 ## Requirements
@@ -10,7 +14,7 @@
 - [GNU Make](https://www.gnu.org/software/make/)
 - [POETRY](https://python-poetry.org/)
 
-## How to Use
+## How to Run
 
 1. **Clone the repository:**
 
@@ -34,5 +38,11 @@
 * `make app` - up app container
 * `make app-logs` - follow the logs in app container
 * `make app-down` - down app container
-* `make app-console` - open app container console
+* `make shell` - open command line in app's container
+* `make all` - up all containers
+* `make all-down` - down all containers
+* `make purge` - down all ciontainers and delete all volumes
 * `make test` - run tests in app container
+
+6. Make shure, after FastAPI service is running, to up Telegram service.
+'''https://github.com/pelkoa-glitch/support-glitch-bot'''
